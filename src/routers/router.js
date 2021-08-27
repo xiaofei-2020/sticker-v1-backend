@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const accountController = require("../controllers/accountController");
+const collectionController = require('../controllers/collectionController');
 
 // Express 是通过 next(error) 来表达出错的，无法识别 async 函数抛出的错误
 // wrap 函数的作用在于将 async 函数抛出的错误转换为 next(error)
@@ -17,6 +18,8 @@ function wrap(handler) {
 // 组装路由
 
 router.post('/account', wrap(accountController.register));
+
+router.get('/collection', wrap(collectionController.listAll));
 
 // router.put('/:id/done', wrap(todoController.done));
 // router.put('/:id/undone', wrap(todoController.undone));

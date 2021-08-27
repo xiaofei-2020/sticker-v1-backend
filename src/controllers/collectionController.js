@@ -5,6 +5,15 @@ const collectionService = require('../services/collectionService');
  * Controller 是业务入口，由 HTTP 路由解析后调用
  */
 class CollectionController {
+  async listAll(req, res) {
+    const list = await collectionService.listAll(req.headers.token, req.params.type);
+    res.send({
+      success: true,
+      code: 1,
+      msg: '',
+      data: list || [],
+    });
+  }
 
 }
 
