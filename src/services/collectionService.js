@@ -1,4 +1,5 @@
 const collectionTable = require('../models/collection');
+const resourceTable = require('../models/resource')
 const inspirecloud = require('@byteinspire/api');
 const ObjectId = inspirecloud.db.ObjectId;
 
@@ -10,7 +11,15 @@ const ObjectId = inspirecloud.db.ObjectId;
 class CollectionService {
   async listAll(id, type) {
     const all = await collectionTable.where({account_id: id, type}).find();
-    return all;
+    const data = all.map(item=>{
+      const resource = resourceTable.where({_id: ObjectId(id)}).find();
+      return {
+        resource_id:item.resource_id,
+        resouce_type:type,
+        img:resource.img
+      }
+    })
+    return data;
   }
 }
 
