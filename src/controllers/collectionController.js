@@ -6,12 +6,12 @@ const collectionService = require('../services/collectionService');
  */
 class CollectionController {
   async listAll(req, res) {
-    const list = await collectionService.listAll(req.headers.token, req.params.type);
+    const list = await collectionService.listAll(req.headers.token, req.params.type,req.params.page,req.params.pageSize);
     res.send({
       success: true,
-      code: 1,
+      code: 10200,
       msg: '',
-      data: list || [],
+      data: list,
     });
   }
 
