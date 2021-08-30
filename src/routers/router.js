@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
+const verifyCodeController = require("../controllers/verifyCodeController");
 const accountController = require("../controllers/accountController");
 const collectionController = require('../controllers/collectionController');
+const tokenController = require("../controllers/tokenController");
 
 // Express 是通过 next(error) 来表达出错的，无法识别 async 函数抛出的错误
 // wrap 函数的作用在于将 async 函数抛出的错误转换为 next(error)
@@ -15,9 +17,14 @@ function wrap(handler) {
   };
 }
 
-// 组装路由
-
+// 验证码
+router.post('/verifyCode', wrap(verifyCodeController.sendVerifyCode));
+// 注册
 router.post('/account', wrap(accountController.register));
+// 登录
+router.post('/token', wrap(tokenController.login));
+// 登出
+router.delete('/token/:token', wrap(tokenController.delete));
 
 router.get('/collection', wrap(collectionController.listAll));
 // 删除收藏

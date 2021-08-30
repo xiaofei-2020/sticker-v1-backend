@@ -38,6 +38,6 @@ BusinessErrorCode.INVALID_PARAMS = new BusinessErrorCode(10401, "Invalid params 
 
 BusinessErrorCode.ACCOUNT_ALREADY_EXISTS = new BusinessErrorCode(10409, "Account already exists!");
 
-BusinessErrorCode.RESOURCE_NOT_FOUND = new BusinessErrorCode(20404, "Resource not found!");
+BusinessErrorCode.RESOURCE_NOT_FOUND = new BusinessErrorCode(20404, "Resource not found! {0}");
 
 module.exports = BusinessErrorCode
