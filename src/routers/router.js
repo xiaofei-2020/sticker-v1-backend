@@ -20,6 +20,8 @@ function wrap(handler) {
 router.post('/account', wrap(accountController.register));
 
 router.get('/collection', wrap(collectionController.listAll));
+// 删除收藏
+router.delete('/collection/:id', wrap(collectionController.delete));
 
 // router.put('/:id/done', wrap(todoController.done));
 // router.put('/:id/undone', wrap(todoController.undone));

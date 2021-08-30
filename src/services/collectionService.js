@@ -20,11 +20,24 @@ class CollectionService {
         img:resource.img
       }
     });
-    
+
     return {
       elements: data,
       totalElements: count,
     };
+  }
+  /**
+ * 删除一条收藏
+ * @param id 收藏的 _id
+ * 若不存在，则抛出 404 错误
+ */
+  async delete(id) {
+    const result = await collectionTable.where({ resource_id: ObjectId(id) }).delete();
+    if (result.deletedCount === 0) {
+      const error = new Error(`collection:${id} not found`);
+      error.status = 10404;
+      throw error;
+    }
   }
 }
 
