@@ -34,9 +34,7 @@ class CollectionService {
   async delete(id) {
     const result = await collectionTable.where({ resource_id: ObjectId(id) }).delete();
     if (result.deletedCount === 0) {
-      const error = new Error(`collection:${id} not found`);
-      error.status = 10404;
-      throw error;
+      throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, `, collection:${id} not found`)
     }
   }
 }
