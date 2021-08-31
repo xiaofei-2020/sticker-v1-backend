@@ -38,14 +38,14 @@ function notFound(req, res) {
 
 function errorHandler(err, req, res, next) {
   if (err instanceof BusinessError) {
-    console.warn(err);
+    console.warn("handled business error", err);
     res.send({
       success: false,
       code: err.code,
       message: err.message
     });
   } else {
-    console.error(err);
+    console.error("unhandled Error", err);
     res.send({
       success: false,
       code: BusinessErrorCode.SERVER_EXCEPTION.code,
