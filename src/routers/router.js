@@ -28,6 +28,8 @@ router.post('/token', wrap(tokenController.login));
 router.delete('/token/:token', wrap(tokenController.delete));
 // 获取收藏列表
 router.get('/collection', wrap(collectionController.listAll));
+// 新增资源收藏
+router.post('/collection', wrap(collectionController.create));
 // 删除收藏
 router.delete('/collection/:id', wrap(collectionController.delete));
 // 新增资源

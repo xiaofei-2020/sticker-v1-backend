@@ -6,7 +6,7 @@ const resourceService = require('../services/resourceService');
  * 包含待办事项的增删改查功能
  */
 class ResourceController {
-  
+
   /**
    * 新增一条资源
    * 响应格式
@@ -25,11 +25,11 @@ class ResourceController {
    * }
    * @param req Express 的请求参数
    * @param res Express 的响应参数
-   */
-   async create(req, res) {
-    const {type, account_id, img, content} = req.body;
+  */
+  async create(req, res) {
+    const { type, account_id, img, content } = req.body;
 
-    const result = await resourceService.create({type, account_id, img, content});
+    const result = await resourceService.create({ type, account_id, img, content });
     res.send(
       {
         success: true,
