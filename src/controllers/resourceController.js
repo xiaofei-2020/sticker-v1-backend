@@ -59,6 +59,7 @@ class ResourceController {
    * @param res Express 的响应参数
   */
   async create(req, res) {
+    const token = req.headers.token;
     const tokenRecord = await checkToken(token);
     const { type, img, content } = req.body;
 
