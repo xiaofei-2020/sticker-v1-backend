@@ -1,6 +1,5 @@
 const resourceService = require('../services/resourceService');
 const tokenService = require('../services/tokenService');
-const checkToken = require('../utils/checkToken');
 
 /**
  * ResourceController

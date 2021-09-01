@@ -3,6 +3,7 @@ const BusinessErrorCode = require("../errors/businessErrorCode");
 const collectionService = require('../services/collectionService');
 const resourceService = require('../services/resourceService');
 const checkToken = require('../utils/checkToken');
+const tokenService = require('../services/tokenService');
 
 /**
  * CollectionController
@@ -11,9 +12,9 @@ const checkToken = require('../utils/checkToken');
 class CollectionController {
   async listAll(req, res) {
     const token = req.headers.token;
-    const tokenRecord = await checkToken(token);
+    const tokenRecord = await tokenService.getActiveAccountByToken(token);
 
-    const list = await collectionService.listAll(tokenRecord.account_id, req.params.type,req.params.page,req.params.pageSize);
+    const list = await collectionService.listAll(tokenRecord._id, req.params.type,req.params.page,req.params.pageSize);
     res.send({
       success: true,
       code: 10200,
@@ -36,7 +37,7 @@ class CollectionController {
  */
   async delete(req, res) {
     const token = req.headers.token;
-    const tokenRecord = await checkToken(token);
+    const tokenRecord = await tokenService.getActiveAccountByToken(token);
 
     // 调用 Service 层对应的业务处理方法
     await collectionService.delete(req.params.id);
@@ -64,7 +65,7 @@ class CollectionController {
    */
      async create(req, res) {
       const token = req.headers.token;
-      const tokenRecord = await checkToken(token);
+      const tokenRecord = await tokenService.getActiveAccountByToken(token);
 
       const {resource_id} = req.body;
       const resource = await resourceService.findOne(resource_id)
@@ -73,7 +74,7 @@ class CollectionController {
       }
   
       // TODO: 检验资源是否重复: 同一用户的收藏列表的资源不能重复
-      await collectionService.create({type: resource.type, resource_id: resource._id, account_id: tokenRecord.account_id});
+      await collectionService.create({type: resource.type, resource_id: resource._id, account_id: tokenRecord._id});
       res.send(
         {
           success: true,
