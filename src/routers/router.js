@@ -4,6 +4,7 @@ const verifyCodeController = require("../controllers/verifyCodeController");
 const accountController = require("../controllers/accountController");
 const collectionController = require('../controllers/collectionController');
 const tokenController = require("../controllers/tokenController");
+const fileController = require("../controllers/fileController");
 
 // Express 是通过 next(error) 来表达出错的，无法识别 async 函数抛出的错误
 // wrap 函数的作用在于将 async 函数抛出的错误转换为 next(error)
@@ -29,6 +30,9 @@ router.delete('/token/:token', wrap(tokenController.delete));
 router.get('/collection', wrap(collectionController.listAll));
 // 删除收藏
 router.delete('/collection/:id', wrap(collectionController.delete));
+
+// 文件下载
+router.get('/file', wrap(fileController.download));
 
 // router.put('/:id/done', wrap(todoController.done));
 // router.put('/:id/undone', wrap(todoController.undone));
