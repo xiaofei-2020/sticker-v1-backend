@@ -17,14 +17,14 @@ class BusinessErrorCode {
 
   parseMessage() {
     if (arguments.length == 0) {
-      return this.messageTmplate;
+      return this.messageTmplate.replace(/\{\d*\}/g, "");
     }
 
     let resultMsg = this.messageTmplate;
     for (let i = 0; i < arguments.length; i++) {
       resultMsg = resultMsg.replace("{" + i + "}", arguments[i]);
     }
-    return resultMsg.replace(/\{\d+\}/g, "");
+    return resultMsg.replace(/\{\d*\}/g, "");
   }
 }
 
