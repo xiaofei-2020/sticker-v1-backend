@@ -18,22 +18,22 @@ class AccountController {
    * 注册账号
    */
   async register(req, res) {
-    let { email, password, verify_code, type } = req.body;
+    let { email, psd, verify_code, type } = req.body;
 
     // 1. 校验验证码 有效性，时效性
-    let verifyCodeRecord = await verifyCodeService.findOne({
-      account_email: email,
-      verify_code: verify_code,
-      type,
-      expires_time: db.gte(new Date())
-    });
+    // let verifyCodeRecord = await verifyCodeService.findOne({
+    //   account_email: email,
+    //   verify_code: verify_code,
+    //   type,
+    //   expires_time: db.gte(new Date())
+    // });
 
-    if (!verifyCodeRecord) {
-      throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", verify code expired or not found!")
-    }
+    // if (!verifyCodeRecord) {
+    //   throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", verify code expired or not found!")
+    // }
 
     // 2. 新增用户数据
-    let plaintPass = RsaService.decrypt(password);
+    let plaintPass = RsaService.decrypt(psd);
     console.log("plaintPass ", plaintPass);
     let sign = RsaService.sign(plaintPass + saltValue);
     console.log("sign", sign);
