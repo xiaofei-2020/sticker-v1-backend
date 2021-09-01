@@ -69,10 +69,11 @@ class CollectionController {
       const {resource_id} = req.body;
       const resource = await resourceService.findOne(resource_id)
       if (!resource) {
-        throw new BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", resource not found!")
+        throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", resource not found!")
       }
   
-      await collectionService.create({type, resource_id, account_id: tokenRecord.account_id});
+      // TODO: 检验资源是否重复: 同一用户的收藏列表的资源不能重复
+      await collectionService.create({type: resource.type, resource_id: resource._id, account_id: tokenRecord.account_id});
       res.send(
         {
           success: true,

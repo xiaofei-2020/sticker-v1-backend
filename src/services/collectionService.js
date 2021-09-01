@@ -2,6 +2,8 @@ const collectionTable = require('../models/collection');
 const resourceTable = require('../models/resource');
 const inspirecloud = require('@byteinspire/api');
 const ObjectId = inspirecloud.db.ObjectId;
+const BusinessError = require('../errors/businessError');
+const BusinessErrorCode = require('../errors/businessErrorCode');
 
 /**
  * class CollectionService {
@@ -23,7 +25,6 @@ class CollectionService {
 
     const data = await Promise.all(promises)
 
-    console.log(data);
     return {
       elements: data,
       totalElements: count,
@@ -37,7 +38,7 @@ class CollectionService {
   async delete(id) {
     const result = await collectionTable.where({ resource_id: ObjectId(id) }).delete();
     if (result.deletedCount === 0) {
-      throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, `, collection:${id} not found`)
+      throw BusinessError.failed(BusinessErrorCode.RESOURCE_NOT_FOUND, `, collection:${id} not found`)
     }
   }
   /**

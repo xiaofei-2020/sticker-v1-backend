@@ -25,7 +25,7 @@ class ResourceService {
 
   async findOne(resourceId) {
     try {
-      return resourceId ? resourceTable.where({id: ObjectId(resourceId)}).findOne() : null;
+      return resourceId ? resourceTable.where({_id: ObjectId(resourceId)}).findOne() : null;
     } catch (err) {
       if (err instanceof TypeError) {
         throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, resourceId);
