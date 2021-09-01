@@ -13,10 +13,10 @@ const RsaService = require('../services/rsaService');
 class TokenController {
   // 登录
   async login(req, res) {
-    let { email, password } = req.body;
+    let { email, psd } = req.body;
 
     // password 解密
-    let plaintPass = RsaService.decrypt(password);
+    let plaintPass = RsaService.decrypt(psd);
 
     // 1. 校验用户名和密码
     let accountRecord = await accountService.findOne({
