@@ -4,6 +4,7 @@ const inspirecloud = require('@byteinspire/api');
 const BusinessError = require('../errors/businessError');
 const BusinessErrorCode = require('../errors/businessErrorCode');
 const ObjectId = inspirecloud.db.ObjectId;
+const db = inspirecloud.db;
 
 /**
  * TokenService

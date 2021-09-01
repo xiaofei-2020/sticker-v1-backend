@@ -1,4 +1,5 @@
 const resourceService = require('../services/resourceService');
+const tokenService = require('../services/tokenService');
 const checkToken = require('../utils/checkToken');
 
 /**
@@ -93,10 +94,10 @@ class ResourceController {
   */
   async create(req, res) {
     const token = req.headers.token;
-    const tokenRecord = await checkToken(token);
+    const tokenRecord = await tokenService.getActiveAccountByToken(token);
     const { type, img, content } = req.body;
 
-    const result = await resourceService.create({ type, account_id: tokenRecord.account_id, img, content });
+    const result = await resourceService.create({ type, account_id: tokenRecord._id, img, content });
     res.send(
       {
         success: true,
