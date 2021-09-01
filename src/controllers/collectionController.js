@@ -1,4 +1,5 @@
 const collectionService = require('../services/collectionService');
+const resourceService = require('../services/resourceService');
 
 /**
  * CollectionController
@@ -37,6 +38,34 @@ class CollectionController {
       data: ''
     });
   }
+    /**
+   * 新增一条收藏
+   * 响应格式
+   * {
+   *  success (boolean, required)
+   *  code (string, optional)   -- 错误码，401 登陆过期或者需要登录；20409 资源已存在；
+   *  msg (string, optional)
+   * }
+   * 请求格式
+   * {   // body
+   *  resource_id (number, required)
+   * }
+   * @param req Express 的请求参数
+   * @param res Express 的响应参数
+   */
+     async create(req, res) {
+      const {resource_id, account_id} = req.body;
+      const { type } = await resourceService.findById(resource_id)
+  
+      await collectionService.create({type, resource_id, account_id});
+      res.send(
+        {
+          success: true,
+          code: 10200,
+          msg: 'ok',
+        }
+      );
+    }
 }
 
 // 导出 Controller 的实例

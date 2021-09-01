@@ -33,9 +33,14 @@ router.get('/resources', wrap(resourceController.listAll));
 router.get('/resources/:resourceID', wrap(resourceController.findOne));
 
 // 收藏列表
+// 获取收藏列表
 router.get('/collection', wrap(collectionController.listAll));
+// 新增资源收藏
+router.post('/collection', wrap(collectionController.create));
 // 删除收藏
 router.delete('/collection/:id', wrap(collectionController.delete));
+// 新增资源
+router.post('/resources', wrap(resourceController.create));
 
 // router.put('/:id/done', wrap(todoController.done));
 // router.put('/:id/undone', wrap(todoController.undone));
