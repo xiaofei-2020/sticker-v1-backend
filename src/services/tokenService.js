@@ -1,5 +1,8 @@
 const tokenTable = require('../models/token');
+const accountTable = require('../models/account');
 const inspirecloud = require('@byteinspire/api');
+const BusinessError = require('../errors/businessError');
+const BusinessErrorCode = require('../errors/businessErrorCode');
 const ObjectId = inspirecloud.db.ObjectId;
 
 /**
@@ -21,6 +24,16 @@ class TokenService {
     const tokenRecord = await this.findOne(param);
     // 使用 delete 删除这些记录
     await tokenTable.delete(tokenRecord);
+  }
+
+  async getActiveAccountByToken(token) {
+    const tokenRecord = await this.findOne({token: token, expires_time: db.gt(new Date())});
+    if (!tokenRecord) {
+      // 不需要捕获，会有全局异常直接转换给用户
+      throw BusinessError.failed(BusinessErrorCode.PERMISSION_INVALID);
+    }
+
+    return accountTable.where({_id: tokenRecord.account_id}).projection({account_email: 1, register_time: 1}).findOne();
   }
 }
 
