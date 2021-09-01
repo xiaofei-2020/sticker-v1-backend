@@ -33,6 +33,10 @@ router.get('/resources', wrap(resourceController.listAll));
 router.get('/resources/:resourceID', wrap(resourceController.findOne));
 
 // 收藏列表
+<<<<<<< HEAD
+=======
+// 获取收藏列表
+>>>>>>> master
 router.get('/collection', wrap(collectionController.listAll));
 // 新增资源收藏
 router.post('/collection', wrap(collectionController.create));
