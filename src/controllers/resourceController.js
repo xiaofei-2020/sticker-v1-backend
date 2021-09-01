@@ -1,4 +1,5 @@
 const resourceService = require('../services/resourceService');
+const checkToken = require('../utils/checkToken');
 
 /**
  * ResourceController
@@ -51,7 +52,6 @@ class ResourceController {
    * 请求格式
    * {   // body
    *  type (string, require) 表情包类别
-   *  account_id (objectID, require)
    *  img (string, require)  -- 图片base64编码后
    *  content (string, require) 图片文字信息
    * }
@@ -59,9 +59,10 @@ class ResourceController {
    * @param res Express 的响应参数
   */
   async create(req, res) {
-    const { type, account_id, img, content } = req.body;
+    const tokenRecord = await checkToken(token);
+    const { type, img, content } = req.body;
 
-    const result = await resourceService.create({ type, account_id, img, content });
+    const result = await resourceService.create({ type, account_id: tokenRecord.account_id, img, content });
     res.send(
       {
         success: true,
