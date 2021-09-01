@@ -33,7 +33,7 @@ class TokenService {
       throw BusinessError.failed(BusinessErrorCode.PERMISSION_INVALID);
     }
 
-    return accountTable.findOne({_id: tokenRecord.account_id});
+    return accountTable.where({_id: tokenRecord.account_id}).projection({account_email: 1, register_time: 1}).findOne();
   }
 }
 
