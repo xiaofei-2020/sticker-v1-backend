@@ -1,5 +1,9 @@
+const BusinessError = require('../errors/businessError');
+const BusinessErrorCode = require("../errors/businessErrorCode");
 const collectionService = require('../services/collectionService');
 const resourceService = require('../services/resourceService');
+const checkToken = require('../utils/checkToken');
+const tokenService = require('../services/tokenService');
 
 /**
  * CollectionController
@@ -7,7 +11,10 @@ const resourceService = require('../services/resourceService');
  */
 class CollectionController {
   async listAll(req, res) {
-    const list = await collectionService.listAll(req.headers.token, req.params.type,req.params.page,req.params.pageSize);
+    const token = req.headers.token;
+    const tokenRecord = await tokenService.getActiveAccountByToken(token);
+
+    const list = await collectionService.listAll(tokenRecord._id, req.params.type,req.params.page,req.params.pageSize);
     res.send({
       success: true,
       code: 10200,
@@ -29,6 +36,9 @@ class CollectionController {
  * @param res Express 的响应参数
  */
   async delete(req, res) {
+    const token = req.headers.token;
+    const tokenRecord = await tokenService.getActiveAccountByToken(token);
+
     // 调用 Service 层对应的业务处理方法
     await collectionService.delete(req.params.id);
     res.send({
@@ -54,10 +64,17 @@ class CollectionController {
    * @param res Express 的响应参数
    */
      async create(req, res) {
-      const {resource_id, account_id} = req.body;
-      const { type } = await resourceService.findById(resource_id)
+      const token = req.headers.token;
+      const tokenRecord = await tokenService.getActiveAccountByToken(token);
+
+      const {resource_id} = req.body;
+      const resource = await resourceService.findOne(resource_id)
+      if (!resource) {
+        throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", resource not found!")
+      }
   
-      await collectionService.create({type, resource_id, account_id});
+      // TODO: 检验资源是否重复: 同一用户的收藏列表的资源不能重复
+      await collectionService.create({type: resource.type, resource_id: resource._id, account_id: tokenRecord._id});
       res.send(
         {
           success: true,

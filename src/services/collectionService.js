@@ -2,6 +2,8 @@ const collectionTable = require('../models/collection');
 const resourceTable = require('../models/resource');
 const inspirecloud = require('@byteinspire/api');
 const ObjectId = inspirecloud.db.ObjectId;
+const BusinessError = require('../errors/businessError');
+const BusinessErrorCode = require('../errors/businessErrorCode');
 
 /**
  * class CollectionService {
@@ -9,17 +11,19 @@ const ObjectId = inspirecloud.db.ObjectId;
  * Service 是业务具体实现，由 Controller 或其它 Service 调用
  */
 class CollectionService {
-  async listAll(id, type, page = 1, pageSize = 10) {
-    const count = await collectionTable.where({ account_id: id, type }).count();
-    const all = await collectionTable.where({ account_id: id, type }).skip((page - 1) * 10).limit(pageSize).find();
-    const data = all.map(async (item) => {
-      const resource = await resourceTable.where({ _id: ObjectId(id) }).findOne();
+  async listAll(account_id, type, page = 1, pageSize = 10) {
+    const count = await collectionTable.where({ account_id, type }).count();
+    const collectionRecords = await collectionTable.where({ account_id, type }).skip((page - 1) * 10).limit(pageSize).find();
+    const promises = collectionRecords.map(async (collection) => {
+      const resource = await resourceTable.where({ _id: collection.resource_id }).findOne();
       return {
-        resource_id: item.resource_id,
+        resource_id: resource.resource_id,
         resouce_type: type,
         img: resource.img
       }
     });
+
+    const data = await Promise.all(promises)
 
     return {
       elements: data,
@@ -34,7 +38,7 @@ class CollectionService {
   async delete(id) {
     const result = await collectionTable.where({ resource_id: ObjectId(id) }).delete();
     if (result.deletedCount === 0) {
-      throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, `, collection:${id} not found`)
+      throw BusinessError.failed(BusinessErrorCode.RESOURCE_NOT_FOUND, `, collection:${id} not found`)
     }
   }
   /**

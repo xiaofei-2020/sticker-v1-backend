@@ -32,7 +32,6 @@ router.get('/resources', wrap(resourceController.listAll));
 // 资源查询
 router.get('/resources/:resourceID', wrap(resourceController.findOne));
 
-// 收藏列表
 // 获取收藏列表
 router.get('/collection', wrap(collectionController.listAll));
 // 新增资源收藏

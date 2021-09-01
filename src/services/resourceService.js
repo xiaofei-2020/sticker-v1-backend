@@ -25,25 +25,21 @@ class ResourceService {
 
   async findOne(resourceId) {
     try {
-      return resourceId ? resourceTable.where({id: ObjectId(resourceId)}).findOne() : null;
+      return resourceId ? resourceTable.where({_id: ObjectId(resourceId)}).findOne() : null;
     } catch (err) {
       if (err instanceof TypeError) {
         throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, resourceId);
       }
     }
   }
-
   /**
    * 新增一条资源
    * @param  resource 用于新增资源的数据，原样存进数据库
    * @return {Promise<any>} 返回实际插入数据库的数据，会增加_id，createdAt和updatedAt字段
    */
-  async create(resource) {
+   async create(resource) {
     return await resourceTable.save(resource);
   }
-
-  // TODO
-  findById(resource_id) {}
 }
 
 // 导出 Service 的实例

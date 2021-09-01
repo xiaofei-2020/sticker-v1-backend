@@ -1,4 +1,5 @@
 const resourceService = require('../services/resourceService');
+const tokenService = require('../services/tokenService');
 
 /**
  * ResourceController
@@ -70,6 +71,40 @@ class ResourceController {
       success: true,
       data: resource
     })
+  }
+  
+  /**
+   * 新增一条资源
+   * 响应格式
+   * {
+   *  success (boolean, required)
+   *  code (string, optional)   -- 错误码，401 登陆过期或者需要登录；20409 资源已存在；
+   *  msg (string, optional)
+   *  resource_id(number, required)
+   * }
+   * 请求格式
+   * {   // body
+   *  type (string, require) 表情包类别
+   *  img (string, require)  -- 图片base64编码后
+   *  content (string, require) 图片文字信息
+   * }
+   * @param req Express 的请求参数
+   * @param res Express 的响应参数
+  */
+  async create(req, res) {
+    const token = req.headers.token;
+    const tokenRecord = await tokenService.getActiveAccountByToken(token);
+    const { type, img, content } = req.body;
+
+    const result = await resourceService.create({ type, account_id: tokenRecord._id, img, content });
+    res.send(
+      {
+        success: true,
+        code: 10200,
+        msg: 'ok',
+        resource_id: result._id,
+      }
+    );
   }
 }
 
