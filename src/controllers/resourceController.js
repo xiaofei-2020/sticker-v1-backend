@@ -20,6 +20,10 @@ class ResourceController {
       keyword = new RegExp(`.*${keyword}.*`);
     }
 
+    // 修复pageSize为字符串导致的bug --腾飞
+    page = Number(page);
+    pageSize = Number(pageSize);
+
     // 分页查询资源
     let listResult = await resourceService.listAll({ keyword, type }, {offset: pageSize * page - pageSize, size: pageSize});
     res.send({

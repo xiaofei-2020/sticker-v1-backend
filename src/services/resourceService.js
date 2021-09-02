@@ -10,13 +10,13 @@ const ObjectId = inspirecloud.db.ObjectId;
  */
 class ResourceService {
   async listAll(param, page) {
-    console.log(param, page);
+    // console.log(param, page);
     let [dataList, dataCount] = await Promise.allSettled([
       resourceTable.where(param).skip(page.offset).limit(page.size).find(),
       resourceTable.where(param).count()
     ]
     );
-    console.log(dataList.value, dataCount.value);
+    // console.log(dataList.value, dataCount.value);
     return {
       elements: dataList.value,
       totalElements: dataCount.value
