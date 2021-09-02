@@ -4,11 +4,8 @@ const verifyCodeController = require("../controllers/verifyCodeController");
 const accountController = require("../controllers/accountController");
 const collectionController = require('../controllers/collectionController');
 const tokenController = require("../controllers/tokenController");
-<<<<<<< HEAD
 const resourceController = require("../controllers/resourceController");
-=======
 const fileController = require("../controllers/fileController");
->>>>>>> feature/kaida
 
 // Express 是通过 next(error) 来表达出错的，无法识别 async 函数抛出的错误
 // wrap 函数的作用在于将 async 函数抛出的错误转换为 next(error)
