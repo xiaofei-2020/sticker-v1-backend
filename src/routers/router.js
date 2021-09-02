@@ -5,6 +5,7 @@ const accountController = require("../controllers/accountController");
 const collectionController = require('../controllers/collectionController');
 const tokenController = require("../controllers/tokenController");
 const resourceController = require("../controllers/resourceController");
+const fileController = require("../controllers/fileController");
 
 // Express 是通过 next(error) 来表达出错的，无法识别 async 函数抛出的错误
 // wrap 函数的作用在于将 async 函数抛出的错误转换为 next(error)
@@ -40,6 +41,9 @@ router.post('/collection', wrap(collectionController.create));
 router.delete('/collection/:id', wrap(collectionController.delete));
 // 新增资源
 router.post('/resources', wrap(resourceController.create));
+
+// 文件下载
+router.get('/file', wrap(fileController.download));
 
 // router.put('/:id/done', wrap(todoController.done));
 // router.put('/:id/undone', wrap(todoController.undone));
