@@ -25,7 +25,7 @@ class ResourceController {
     pageSize = Number(pageSize);
 
     // 分页查询资源
-    let listResult = await resourceService.listAll({ keyword, type }, {offset: pageSize * page - pageSize, size: pageSize});
+    let listResult = await resourceService.listAll({ content: keyword, type }, {offset: pageSize * page - pageSize, size: pageSize});
     res.send({
       code: 200,
       success: true,

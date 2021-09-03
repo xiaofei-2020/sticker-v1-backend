@@ -1,4 +1,4 @@
-const FileService = require('../services/FileService');
+const FileService = require('../services/fileService');
 
 /**
  * FileController
