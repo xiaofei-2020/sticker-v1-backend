@@ -2,8 +2,10 @@ const BusinessError = require('../errors/businessError');
 const BusinessErrorCode = require("../errors/businessErrorCode");
 const collectionService = require('../services/collectionService');
 const resourceService = require('../services/resourceService');
-const checkToken = require('../utils/checkToken');
 const tokenService = require('../services/tokenService');
+const inspirecloud = require('@byteinspire/api');
+const ObjectId = inspirecloud.db.ObjectId;
+
 
 /**
  * CollectionController
@@ -67,13 +69,22 @@ class CollectionController {
       const token = req.headers.token;
       const tokenRecord = await tokenService.getActiveAccountByToken(token);
 
+      // 查找该资源是否存在
       const {resource_id} = req.body;
-      const resource = await resourceService.findOne(resource_id)
+      const resource = await resourceService.findOne(resource_id);
       if (!resource) {
         throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", resource not found!")
       }
+
+      // 查找当前用户的所有收藏, 判断是否已收藏该资源
+      const collectionRecord = await collectionService.listAll(tokenRecord._id, resource.type, 1, 1000)
+      let isExist = collectionRecord.elements.findIndex(c => {
+        return c.resource_id.toString() === resource_id;
+      }) > -1
+      if (isExist) {
+        throw BusinessError.failed(BusinessErrorCode.INVALID_PARAMS, ", collection already exist!")
+      }
   
-      // TODO: 检验资源是否重复: 同一用户的收藏列表的资源不能重复
       await collectionService.create({type: resource.type, resource_id: resource._id, account_id: tokenRecord._id});
       res.send(
         {

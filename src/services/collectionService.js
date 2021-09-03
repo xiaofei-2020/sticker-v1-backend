@@ -17,7 +17,7 @@ class CollectionService {
     const promises = collectionRecords.map(async (collection) => {
       const resource = await resourceTable.where({ _id: collection.resource_id }).findOne();
       return {
-        resource_id: resource.resource_id,
+        resource_id: resource._id,
         resouce_type: type,
         img: resource.img
       }
