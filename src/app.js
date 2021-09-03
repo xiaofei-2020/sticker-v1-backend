@@ -13,6 +13,14 @@ app.use(express.static(path.join(__dirname, '../public')));
 // 请求体 parse 中间件，用于 parse json 格式请求体
 app.use(express.json());
 
+app.all('*', function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
+    res.header("Content-Type", "application/json;charset=utf-8");
+    next();
+});
+
 // 为应用使用路由定义
 // 待办事项业务路由
 app.use('/api', router);
