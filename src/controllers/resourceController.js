@@ -16,6 +16,11 @@ class ResourceController {
       page = 1;
     }
 
+    // bug修复: 当前端传过来的type为空时导致的bug
+    if(!type) {
+      type = /.*/
+    }
+
     if (keyword) {
       keyword = new RegExp(`.*${keyword}.*`);
     }
