@@ -13,10 +13,27 @@ const ObjectId = inspirecloud.db.ObjectId;
  */
 class CollectionController {
   async listAll(req, res) {
+    let { type, page, pageSize } = req.query;
+    if (!pageSize && pageSize !== 0) {
+      pageSize = 10;
+    }
+
+    if (!page) {
+      page = 1;
+    }
+
+    // bug修复: 当前端传过来的type为空时导致的bug
+    if(!type || type  === "all") {
+      type = /.*/
+    }
+
+    // 修复pageSize为字符串导致的bug --腾飞
+    page = Number(page);
+    pageSize = Number(pageSize);
     const token = req.headers.token;
     const tokenRecord = await tokenService.getActiveAccountByToken(token);
 
-    const list = await collectionService.listAll(tokenRecord._id, req.params.type,req.params.page,req.params.pageSize);
+    const list = await collectionService.listAll(tokenRecord._id, type, page, pageSize);
     res.send({
       success: true,
       code: 10200,

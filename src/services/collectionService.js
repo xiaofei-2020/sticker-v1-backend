@@ -18,7 +18,7 @@ class CollectionService {
       const resource = await resourceTable.where({ _id: collection.resource_id }).findOne();
       return {
         resource_id: resource._id,
-        resouce_type: type,
+        type: resource.type,
         img: resource.img
       }
     });
